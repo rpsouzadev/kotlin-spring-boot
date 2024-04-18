@@ -1,6 +1,8 @@
-package com.rpsouza.kotlinspring
+package com.rpsouza.kotlinspring.controller
 
+import com.rpsouza.kotlinspring.converters.NumberConverter
 import com.rpsouza.kotlinspring.exceptions.UnsupportedMathOperationException
+import com.rpsouza.kotlinspring.math.SimpleMath
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -10,15 +12,20 @@ import java.util.concurrent.atomic.AtomicLong
 class MathController {
   val counter: AtomicLong = AtomicLong()
 
+  private val math = SimpleMath()
+
   @RequestMapping(value = ["/sum/{numberOne}/{numberTwo}"])
   fun sum(
     @PathVariable(value = "numberOne") numberOne: String?,
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
-    if (!isNumeric(numberOne) || !isNumeric(numberTwo))
+    if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
       throw UnsupportedMathOperationException("Please set a numeric value!")
 
-    return convertToFloat(numberOne) + convertToFloat(numberTwo)
+    return math.sum(
+      NumberConverter.convertToFloat(numberOne),
+      NumberConverter.convertToFloat(numberTwo)
+    )
   }
 
   @RequestMapping(value = ["/sub/{numberOne}/{numberTwo}"])
@@ -26,10 +33,13 @@ class MathController {
     @PathVariable(value = "numberOne") numberOne: String?,
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
-    if (!isNumeric(numberOne) || !isNumeric(numberTwo))
+    if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
       throw UnsupportedMathOperationException("Please set a numeric value!")
 
-    return convertToFloat(numberOne) - convertToFloat(numberTwo)
+    return math.subtraction(
+      NumberConverter.convertToFloat(numberOne),
+      NumberConverter.convertToFloat(numberTwo)
+    )
   }
 
   @RequestMapping(value = ["/division/{numberOne}/{numberTwo}"])
@@ -37,10 +47,13 @@ class MathController {
     @PathVariable(value = "numberOne") numberOne: String?,
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
-    if (!isNumeric(numberOne) || !isNumeric(numberTwo))
+    if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
       throw UnsupportedMathOperationException("Please set a numeric value!")
 
-    return convertToFloat(numberOne) / convertToFloat(numberTwo)
+    return math.division(
+      NumberConverter.convertToFloat(numberOne),
+      NumberConverter.convertToFloat(numberTwo)
+    )
   }
 
   @RequestMapping(value = ["/multiplication/{numberOne}/{numberTwo}"])
@@ -48,22 +61,12 @@ class MathController {
     @PathVariable(value = "numberOne") numberOne: String?,
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
-    if (!isNumeric(numberOne) || !isNumeric(numberTwo))
+    if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
       throw UnsupportedMathOperationException("Please set a numeric value!")
 
-    return convertToFloat(numberOne) * convertToFloat(numberTwo)
-  }
-
-  private fun convertToFloat(strNumber: String?): Float {
-    if (strNumber.isNullOrBlank()) return 0.0f
-
-    val number = strNumber.replace(",".toRegex(), ".")
-    return if (isNumeric(number)) number.toFloat() else 0.0f
-  }
-
-  private fun isNumeric(strNumber: String?): Boolean {
-    if (strNumber.isNullOrBlank()) return false
-    val number = strNumber.replace(",".toRegex(), ".")
-    return number.matches("""[-+]?[0-9]*\.?[0-9]+""".toRegex())
+    return math.multiplication(
+      NumberConverter.convertToFloat(numberOne),
+      NumberConverter.convertToFloat(numberTwo)
+    )
   }
 }
