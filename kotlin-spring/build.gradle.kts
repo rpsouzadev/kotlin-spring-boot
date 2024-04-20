@@ -36,6 +36,7 @@ dependencies {
 	implementation("mysql:mysql-connector-java:8.0.33")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("com.github.dozermapper:dozer-core:7.0.0")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

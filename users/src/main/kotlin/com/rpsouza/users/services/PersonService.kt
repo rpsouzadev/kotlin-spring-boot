@@ -2,7 +2,6 @@ package com.rpsouza.kotlinspring.services
 
 import com.rpsouza.kotlinspring.data.vo.v1.PersonVO
 import com.rpsouza.kotlinspring.exceptions.ResourceNotFoundException
-import com.rpsouza.kotlinspring.mapper.DozerMapper
 import com.rpsouza.kotlinspring.model.Person
 import com.rpsouza.kotlinspring.repository.PersonRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,25 +17,19 @@ class PersonService {
 
   fun findAll(): List<PersonVO> {
     logger.info("Finding all people!")
-    val listPerson = repository.findAll()
-
-    return DozerMapper.parseListObjects(listPerson, PersonVO::class.java)
+    return repository.findAll()
   }
 
   fun findById(id: Long): PersonVO {
     logger.info("Finding one person!")
-    val person = repository.findById(id)
+    return repository.findById(id)
       .orElseThrow { ResourceNotFoundException("No records found for this ID") }
-
-    return DozerMapper.parseObject(person, PersonVO::class.java)
   }
 
 
   fun createPerson(person: PersonVO): PersonVO {
     logger.info("Creating one person with name ${person.firstName}!")
-    val entity: Person = DozerMapper.parseObject(person, Person::class.java)
-
-    return DozerMapper.parseObject(repository.save(entity), PersonVO::class.java)
+    return repository.save(person)
   }
 
   fun updatePerson(person: PersonVO): PersonVO {
@@ -50,7 +43,7 @@ class PersonService {
       entity.address = person.address
       entity.gender = person.gender
 
-    return DozerMapper.parseObject(repository.save(entity), PersonVO::class.java)
+    return repository.save(entity)
   }
 
   fun deletePerson(id: Long) {
