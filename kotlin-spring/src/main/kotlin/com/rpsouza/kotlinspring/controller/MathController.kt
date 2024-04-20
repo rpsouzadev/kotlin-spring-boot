@@ -1,7 +1,7 @@
 package com.rpsouza.kotlinspring.controller
 
 import com.rpsouza.kotlinspring.converters.NumberConverter
-import com.rpsouza.kotlinspring.exceptions.UnsupportedMathOperationException
+import com.rpsouza.kotlinspring.exceptions.ResourceNotFoundException
 import com.rpsouza.kotlinspring.math.SimpleMath
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -20,7 +20,7 @@ class MathController {
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
     if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-      throw UnsupportedMathOperationException("Please set a numeric value!")
+      throw ResourceNotFoundException("Please set a numeric value!")
 
     return math.sum(
       NumberConverter.convertToFloat(numberOne),
@@ -34,7 +34,7 @@ class MathController {
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
     if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-      throw UnsupportedMathOperationException("Please set a numeric value!")
+      throw ResourceNotFoundException("Please set a numeric value!")
 
     return math.subtraction(
       NumberConverter.convertToFloat(numberOne),
@@ -48,7 +48,7 @@ class MathController {
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
     if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-      throw UnsupportedMathOperationException("Please set a numeric value!")
+      throw ResourceNotFoundException("Please set a numeric value!")
 
     return math.division(
       NumberConverter.convertToFloat(numberOne),
@@ -62,7 +62,7 @@ class MathController {
     @PathVariable(value = "numberTwo") numberTwo: String?
   ): Float {
     if (!NumberConverter.isNumeric(numberOne) || !NumberConverter.isNumeric(numberTwo))
-      throw UnsupportedMathOperationException("Please set a numeric value!")
+      throw ResourceNotFoundException("Please set a numeric value!")
 
     return math.multiplication(
       NumberConverter.convertToFloat(numberOne),

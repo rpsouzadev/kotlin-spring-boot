@@ -10,8 +10,20 @@ plugins {
 group = "com.rpsouza"
 version = "0.0.1-SNAPSHOT"
 
+sourceSets {
+	create("mysqlSupport") {
+		java {
+			srcDir("src/mysql/java")
+		}
+	}
+}
+
 java {
 	sourceCompatibility = JavaVersion.VERSION_21
+
+	registerFeature("mysqlSupport") {
+		usingSourceSet(sourceSets["mysqlSupport"])
+	}
 }
 
 repositories {
@@ -20,6 +32,8 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("mysql:mysql-connector-java:8.0.33")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
