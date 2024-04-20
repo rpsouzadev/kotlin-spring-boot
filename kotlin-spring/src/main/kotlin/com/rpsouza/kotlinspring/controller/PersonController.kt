@@ -1,6 +1,7 @@
 package com.rpsouza.kotlinspring.controller
 
 import com.rpsouza.kotlinspring.data.vo.v1.PersonVO
+import com.rpsouza.kotlinspring.data.vo.v2.PersonVO as PersonVOV2
 import com.rpsouza.kotlinspring.services.PersonService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
@@ -31,6 +32,15 @@ class PersonController {
   )
   fun createPerson(@RequestBody person: PersonVO): PersonVO {
     return service.createPerson(person)
+  }
+
+  @PostMapping(
+    value = ["/v2"],
+    consumes = [MediaType.APPLICATION_JSON_VALUE],
+    produces = [MediaType.APPLICATION_JSON_VALUE]
+  )
+  fun createPersonV2(@RequestBody person: PersonVOV2): PersonVOV2 {
+    return service.createPersonV2(person)
   }
 
 

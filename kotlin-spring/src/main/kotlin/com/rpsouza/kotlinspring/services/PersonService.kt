@@ -1,8 +1,10 @@
 package com.rpsouza.kotlinspring.services
 
 import com.rpsouza.kotlinspring.data.vo.v1.PersonVO
+import com.rpsouza.kotlinspring.data.vo.v2.PersonVO as PersonVOV2
 import com.rpsouza.kotlinspring.exceptions.ResourceNotFoundException
 import com.rpsouza.kotlinspring.mapper.DozerMapper
+import com.rpsouza.kotlinspring.mapper.custom.PersonMapper
 import com.rpsouza.kotlinspring.model.Person
 import com.rpsouza.kotlinspring.repository.PersonRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +15,9 @@ import java.util.logging.Logger
 class PersonService {
   @Autowired
   private lateinit var repository: PersonRepository
+
+  @Autowired
+  private lateinit var mapper: PersonMapper
 
   private val logger = Logger.getLogger(PersonService::class.java.name)
 
@@ -31,12 +36,18 @@ class PersonService {
     return DozerMapper.parseObject(person, PersonVO::class.java)
   }
 
-
   fun createPerson(person: PersonVO): PersonVO {
     logger.info("Creating one person with name ${person.firstName}!")
     val entity: Person = DozerMapper.parseObject(person, Person::class.java)
 
     return DozerMapper.parseObject(repository.save(entity), PersonVO::class.java)
+  }
+
+  fun createPersonV2(person: PersonVOV2): PersonVOV2 {
+    logger.info("Creating one person with name ${person.firstName}!")
+    val entity: Person = mapper.mapVoToEntity(person)
+
+    return mapper.mapEntityToVo(repository.save(entity))
   }
 
   fun updatePerson(person: PersonVO): PersonVO {
@@ -61,6 +72,4 @@ class PersonService {
 
     repository.delete(entity)
   }
-
-
 }
